@@ -1,0 +1,12 @@
+# Ignore development files
+node_modules
+npm-debug.log
+.next
+.git
+.env*
+!.env.example
+
+# Keep essential files
+!package.json
+!package-lock.json
+!next.config.js

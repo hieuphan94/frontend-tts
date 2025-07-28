@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  overflow-x: hidden;
+}
+
+/* Thêm vào global.css hoặc styles của component */
+[draggable='true'] {
+  cursor: move;
+}
+
+.drag-over {
+  border-color: #3b82f6; /* blue-500 */
+  background-color: #eff6ff; /* blue-50 */
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+/* Animation và Styles cho Drag & Drop */
+
+/* Element đang được kéo */
+.dragging {
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  cursor: grabbing !important;
+}
+
+/* Vùng có thể thả */
+.drag-over {
+  transition: all 0.2s ease;
+  background-color: rgba(59, 130, 246, 0.05) !important; /* Màu nhạt hơn */
+  border-color: #3b82f6 !important; /* blue-500 */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  transform: scale(1.01); /* Scale nhẹ hơn */
+}
+
+/* Hiệu ứng khi thả thành công */
+.drop-success {
+  animation: dropFlash 0.3s ease;
+}
+
+@keyframes dropFlash {
+  0% {
+    background-color: rgba(59, 130, 246, 0.1);
+    transform: scale(1.02);
+  }
+  50% {
+    background-color: rgba(59, 130, 246, 0.05);
+    transform: scale(1.01);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+/* Smooth transitions cho tất cả các thay đổi */
+.day-header {
+  transition: all 0.2s ease;
+}
+
+/* Cursor styles */
+[draggable='true'] {
+  cursor: grab;
+}
+
+[draggable='true']:active {
+  cursor: grabbing;
+}
+
+/* Animation styles cho DayCard */
+.day-card-container {
+  position: relative;
+  will-change: transform;
+}
+
+/* Smooth transitions cho tất cả các thay đổi */
+.day-card-container > div {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect */
+.day-card-container:hover > div:last-child {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Dragging state */
+.day-card-container.dragging > div:last-child {
+  transform: scale(0.98);
+  opacity: 0.8;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Drop target state - thêm mới */
+.day-card.drop-target {
+  background-color: rgba(59, 130, 246, 0.05);
+  border-color: #3b82f6;
+  transition: all 0.2s ease-out;
+}
+
+/* Drop hover state - thêm mới */
+.day-card.drop-hover {
+  background-color: rgba(59, 130, 246, 0.03);
+  border-color: #93c5fd; /* blue-300 */
+  transition: all 0.15s ease-in;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes overlayAppear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-modal-appear {
+  animation: modalAppear 0.2s ease-out;
+}
+
+.animate-overlay-appear {
+  animation: overlayAppear 0.2s ease-out;
+}
+
+
+.prose ul {
+  list-style-type: disc !important;
+  margin-left: 1.5em !important;
+}
+.prose ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5em !important;
+}
+.prose li {
+  margin-bottom: 0.25em;
+}
