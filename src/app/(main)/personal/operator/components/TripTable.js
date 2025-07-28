@@ -28,39 +28,39 @@ const columns = [
 
 export const TripTable = memo(({ trips, loadingTripIds, onView }) => {
   return (
-    <Table aria-label="Bảng danh sách Trip" removeWrapper className="mt-2">
-      <TableHeader>
+    <Table aria-label="Bảng danh sách Trip" removeWrapper className="mt-2 text-xs">
+      <TableHeader className="text-xs">
         {columns.map((column) => (
-          <TableColumn key={column.key}>{column.label}</TableColumn>
+          <TableColumn key={column.key} className="text-xs">{column.label}</TableColumn>
         ))}
       </TableHeader>
-      <TableBody emptyContent={trips.length === 0 ? 'Không có dữ liệu' : undefined}>
+      <TableBody emptyContent={trips.length === 0 ? 'Không có dữ liệu' : undefined} className="text-xs">
         {trips.map((trip) => (
-          <TableRow key={trip.id}>
-            <TableCell>{trip.code}</TableCell>
-            <TableCell>{trip.title}</TableCell>
-            <TableCell>{new Date(trip.startDate).toLocaleDateString()}</TableCell>
-            <TableCell>{new Date(trip.endDate).toLocaleDateString()}</TableCell>
-            <TableCell>{trip.settings?.numberOfDays}</TableCell>
-            <TableCell>{trip.settings?.globalPax}</TableCell>
-            <TableCell>{trip.customerInfo?.name}</TableCell>
-            <TableCell>{trip.internalInfo?.createdBy}</TableCell>
-            <TableCell>{trip.internalInfo?.createdAt ? new Date(trip.internalInfo.createdAt).toLocaleDateString() : ''}</TableCell>
-            <TableCell>{trip.totalPrice?.toLocaleString()} đ</TableCell>
-            <TableCell>
+          <TableRow key={trip.id} className="text-xs">
+            <TableCell className="text-xs">{trip.code}</TableCell>
+            <TableCell className="text-xs">{trip.title}</TableCell>
+            <TableCell className="text-xs">{new Date(trip.startDate).toLocaleString('vi-VN')}</TableCell>
+            <TableCell className="text-xs">{new Date(trip.endDate).toLocaleString('vi-VN')}</TableCell>
+            <TableCell className="text-xs">{trip.settings?.numberOfDays}</TableCell>
+            <TableCell className="text-xs">{trip.settings?.globalPax}</TableCell>
+            <TableCell className="text-xs">{trip.customerInfo?.name}</TableCell>
+            <TableCell className="text-xs">{trip.internalInfo?.createdBy}</TableCell>
+            <TableCell className="text-xs">{trip.internalInfo?.createdAt ? new Date(trip.internalInfo.createdAt).toLocaleString('vi-VN') : ''}</TableCell>
+            <TableCell className="text-xs">{trip.totalPrice?.toLocaleString()} đ</TableCell>
+            <TableCell className="text-xs">
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${trip.status.current === 'active' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{trip.status.current}</span>
             </TableCell>
-            <TableCell>
+            <TableCell className="text-xs">
               <Button
                 isIconOnly
                 size="sm"
-                color="secondary"
+                color="primary"
                 variant="solid"
                 aria-label="Xem"
                 onPress={() => onView(trip)}
                 isLoading={loadingTripIds.view?.includes(trip.id)}
               >
-                <Eye size={18} />
+                <span className="text-xs ">Book</span>
               </Button>
             </TableCell>
           </TableRow>
