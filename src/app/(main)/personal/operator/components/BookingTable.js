@@ -20,7 +20,7 @@ const columns = [
   { key: 'status', label: 'Trạng thái' },
 ];
 
-export const OperatorTable = memo(({ data, onCodeClick }) => {
+export const BookingTable = memo(({ data, onCodeClick }) => {
   return (
     <Table aria-label="Bảng sale booking" removeWrapper className="mt-2 text-xs">
       <TableHeader className="text-xs">
@@ -68,7 +68,7 @@ export const OperatorTable = memo(({ data, onCodeClick }) => {
   );
 });
 
-OperatorTable.propTypes = {
+BookingTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       bookingRate: PropTypes.number,
@@ -84,4 +84,4 @@ OperatorTable.propTypes = {
   onCodeClick: PropTypes.func.isRequired,
 };
 
-OperatorTable.displayName = 'OperatorTable';
+BookingTable.displayName = 'BookingTable';

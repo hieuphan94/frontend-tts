@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { TripTable } from './components/TripTable';
 import FormSaleBook from './components/FormSaleBook';
 import { mockDataOperatorTable } from './data/mockDataOperatorTable';
-import { OperatorTable } from './components/OperatorTable';
+import { BookingTable } from './components/BookingTable';
 
 export default function OperatorPage() {
   const [data] = useState(mockData.data);
@@ -52,7 +52,7 @@ export default function OperatorPage() {
 
       <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">Operator Table</h2>
-        <OperatorTable data={mockDataOperatorTable} onCodeClick={handleCodeClick} />
+        <BookingTable data={mockDataOperatorTable} onCodeClick={handleCodeClick} />
       </div>
     </>
   );
