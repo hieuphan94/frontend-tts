@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { mockData } from './data/mockData';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { TripTable } from './components/TripTable';
+import FormSaleBook from './components/FormSaleBook';
 
 export default function OperatorPage() {
   const [data] = useState(mockData.data);
@@ -24,17 +25,28 @@ export default function OperatorPage() {
   }
 
   return (
-    <Card className="w-full max-w-7xl mx-auto mt-6">
-      <CardHeader>
-        <CardTitle>Danh sách Trip</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <TripTable 
-          trips={data} 
-          loadingTripIds={loadingTripIds} 
-          onView={handleView} 
-        />
-      </CardContent>
-    </Card>
+    <>
+      <Card className="w-full max-w-7xl mx-auto mt-6">
+        <CardHeader>
+          <CardTitle>Danh sách Trip</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <TripTable 
+            trips={data} 
+            loadingTripIds={loadingTripIds} 
+            onView={handleView} 
+          />
+        </CardContent>
+      </Card>
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Form Sale Book</h2>
+        <FormSaleBook />
+      </div>
+
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">Form Sale Book</h2>
+        <FormSaleBook />
+      </div>
+    </>
   );
 }
