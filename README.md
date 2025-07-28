@@ -76,7 +76,7 @@ src/
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd services/frontend-tts
+   cd frontend-tts
    ```
 
 2. **Install dependencies**
@@ -91,7 +91,7 @@ src/
 3. **Set up environment variables**
    Create a `.env.local` file:
    ```env
-   NEXT_PUBLIC_API_URL=http://localhost:3001
+   NEXT_PUBLIC_API_URL=http://localhost:3000
    ```
 
 4. **Run the development server**
@@ -183,14 +183,14 @@ npm run lint         # Lint and fix code
 
 ## 🚀 Deployment
 
-### Docker
+### Caprover
 ```bash
 # Build Docker image
-docker build -t ima-frontend-tts .
-
-# Run container
-docker run -p 3005:3005 ima-frontend-tts
+caprover deploy
 ```
+## Instruction
+
+
 
 ### Environment Setup
 Ensure all environment variables are properly configured for production.
@@ -208,4 +208,4 @@ This project is part of the IMA CRM system.
 
 ---
 
-**Note**: This is a simplified version focused on operator functionality. For full CRM features, see the main frontend application.
+**Note**: This is a simplified version focused on operator functionality. For full WORKSPACE features, see the main frontend application.
