@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { mockData } from './data/mockData';
+import { mockData } from './data/mockDataTrip';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { TripTable } from './components/TripTable';
 import FormSaleBook from './components/FormSaleBook';
+import { mockDataOperatorTable } from './data/mockDataOperatorTable';
+import { OperatorTable } from './components/OperatorTable';
 
 export default function OperatorPage() {
   const [data] = useState(mockData.data);
@@ -13,6 +15,11 @@ export default function OperatorPage() {
   const handleView = (trip) => {
     // Xử lý khi bấm nút Xem
     alert(`Xem trip: ${trip.title}`);
+  };
+
+  const handleCodeClick = (row) => {
+    // Xử lý khi bấm nút Code
+    alert(`Xem sale: ${row.code}`);
   };
 
   if (loading && !data?.length) {
@@ -31,10 +38,10 @@ export default function OperatorPage() {
           <CardTitle>Danh sách Trip</CardTitle>
         </CardHeader>
         <CardContent>
-          <TripTable 
-            trips={data} 
-            loadingTripIds={loadingTripIds} 
-            onView={handleView} 
+          <TripTable
+            trips={data}
+            loadingTripIds={loadingTripIds}
+            onView={handleView}
           />
         </CardContent>
       </Card>
@@ -44,8 +51,8 @@ export default function OperatorPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Form Sale Book</h2>
-        <FormSaleBook />
+        <h2 className="text-2xl font-bold mb-4">Operator Table</h2>
+        <OperatorTable data={mockDataOperatorTable} onCodeClick={handleCodeClick} />
       </div>
     </>
   );

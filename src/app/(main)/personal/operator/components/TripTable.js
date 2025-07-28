@@ -36,7 +36,7 @@ export const TripTable = memo(({ trips, loadingTripIds, onView }) => {
       </TableHeader>
       <TableBody emptyContent={trips.length === 0 ? 'Không có dữ liệu' : undefined} className="text-xs">
         {trips.map((trip) => (
-          <TableRow key={trip.id} className="text-xs">
+          <TableRow key={trip.id} className="text-xs border-b border-gray-300">
             <TableCell className="text-xs">{trip.code}</TableCell>
             <TableCell className="text-xs">{trip.title}</TableCell>
             <TableCell className="text-xs">{new Date(trip.startDate).toLocaleString('vi-VN')}</TableCell>
