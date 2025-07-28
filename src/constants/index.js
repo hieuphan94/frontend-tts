@@ -1,31 +1,11 @@
 export const APP_ROUTES = {
   HOME: '/',
-  LOGIN: '/login',
-  REGISTER: '/register',
-  DASHBOARD: '/dashboard',
-  PROFILE: '/profile',
-  TOURS: '/tours',
-  SERVICES: '/services',
+  PERSONAL: '/personal',
+  OPERATOR: '/personal/operator',
 };
 
 export const API_ENDPOINTS = {
-  AUTH: {
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
-    LOGOUT: '/auth/logout',
-    PROFILE: '/auth/profile',
-  },
-  TOURS: {
-    LIST: '/tours',
-    DETAIL: (id) => `/tours/${id}`,
-    CREATE: '/tours',
-    UPDATE: (id) => `/tours/${id}`,
-    DELETE: (id) => `/tours/${id}`,
-  },
-  SERVICES: {
-    LIST: '/services',
-    DETAIL: (id) => `/services/${id}`,
-  },
+
 };
 
 export const STATUS_CODES = {
@@ -45,8 +25,5 @@ export const APP_CONFIG = {
 };
 
 export const DEPARTMENTS = [
-  { label: 'Sales', value: 'sales' },
   { label: 'Operator', value: 'operator' },
-  { label: 'Accountant', value: 'accountant' },
-  { label: 'Intern', value: 'intern' },
 ];

@@ -1,11 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
 export default function RoomPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div className="space-y-6 p-6">
