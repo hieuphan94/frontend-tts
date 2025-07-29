@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { mockDataBookingTable } from './data/mockDataBookingTable';
@@ -8,12 +8,15 @@ import { useRouter } from 'next/navigation';
 export default function OperatorPage() {
   const [data] = useState(mockDataBookingTable);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
 
   const handleCodeClick = (row) => {
     router.push(`/personal/operator/${row.code}`);
   };
-
+  
   const columns = [
+    { key: 'stt', label: 'STT' },
     { key: 'bookingRate', label: 'Booking Rate' },
     { key: 'code', label: 'Code' },
     { key: 'arrivalDate', label: 'Arrival Date' },
@@ -36,7 +39,7 @@ export default function OperatorPage() {
     <>
       <h2 className="text-2xl font-bold mb-4">Booking Table</h2>
       <div className="mt-8">
-        <Table aria-label="Booking Table" removeWrapper className="mt-2 text-xs">
+        <Table isLoading={loading} aria-label="Booking Table" removeWrapper className="mt-2 text-xs">
           <TableHeader className="text-xs">
             {columns.map((column) => (
               <TableColumn key={column.key} className="text-xs">{column.label}</TableColumn>
@@ -45,6 +48,7 @@ export default function OperatorPage() {
           <TableBody emptyContent={data.length === 0 ? 'No data' : undefined} className="text-xs">
             {data.map((row, idx) => (
               <TableRow key={row.code || idx} className="text-xs border-b border-gray-300">
+                <TableCell className="text-xs">{idx + 1}</TableCell>
                 <TableCell className="text-xs">{(row.bookingRate * 100).toFixed(0)}%</TableCell>
                 <TableCell className="text-xs">
                   <button
@@ -65,9 +69,7 @@ export default function OperatorPage() {
                 </TableCell>
                 <TableCell className="text-xs">{row.sale}</TableCell>
                 <TableCell className="text-xs">
-                  <span className={`px-2 py-1 rounded-full text-xs ${statusColor[row.status]}`}>
-                    {row.status}
-                  </span>
+                  <span className={`px-2 py-1 rounded-full text-xs ${statusColor[row.status]}`}>{row.status}</span>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,16 +1,25 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { mockData } from '../operator/data/mockDataTrip';
 import { Table, TableHeader, TableColumn, TableBody, TableCell, TableRow, Button } from '@nextui-org/react';
-import PropTypes from 'prop-types';
-import { useRouter } from 'next/navigation';
+import CreateBookOpModal from './components/createBookOpModal';
 
 export default function SalePage() {
   const [data] = useState(mockData.data);
-  const router = useRouter();
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleViewBooking = (id) => {
-    router.push(`/personal/sale/book`);
+
+
+  const handleViewBooking = (trip) => {
+    setSelectedTrip(trip);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedTrip(null);
   };
 
   const statusColor = {
@@ -24,7 +33,7 @@ export default function SalePage() {
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Trip List</h2>
-      <Table aria-label="Trip Table" removeWrapper className="mt-2 text-xs"
+      <Table isLoading={loading} aria-label="Trip Table" removeWrapper className="mt-2 text-xs"
         emptyContent={data.length === 0 ? 'No data' : undefined}
       >
         <TableHeader className="text-xs">
@@ -67,7 +76,7 @@ export default function SalePage() {
                   color="primary"
                   variant="solid"
                   aria-label="Book to Op"
-                  onPress={() => handleViewBooking(trip.id)}
+                  onPress={() => handleViewBooking(trip)}
                 >
                   <span className="text-xs">Book to Op</span>
                 </Button>
@@ -76,37 +85,11 @@ export default function SalePage() {
           ))}
         </TableBody>
       </Table>
+      <CreateBookOpModal
+        trip={selectedTrip}
+        open={openModal}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }
-
-SalePage.propTypes = {
-  trips: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      code: PropTypes.string,
-      title: PropTypes.string,
-      startDate: PropTypes.string,
-      endDate: PropTypes.string,
-      settings: PropTypes.shape({
-        numberOfDays: PropTypes.number,
-        globalPax: PropTypes.number,
-      }),
-      customerInfo: PropTypes.shape({
-        name: PropTypes.string,
-      }),
-      internalInfo: PropTypes.shape({
-        createdBy: PropTypes.string,
-        createdAt: PropTypes.string,
-      }),
-      totalPrice: PropTypes.number,
-      status: PropTypes.shape({
-        current: PropTypes.string,
-      }),
-    })
-  ).isRequired,
-  loadingTripIds: PropTypes.shape({
-    view: PropTypes.arrayOf(PropTypes.string),
-  }),
-  onView: PropTypes.func.isRequired,
-};
