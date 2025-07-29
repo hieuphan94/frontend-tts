@@ -1,4 +1,4 @@
-export const mockDataOperatorTable = [
+export const mockDataBookingTable = [
     {
       bookingRate: 0.85,
       code: 'SALE-2024-001',

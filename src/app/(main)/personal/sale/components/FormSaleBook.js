@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 
-export default function FormSaleBook() {
+export default function FormSaleBook({ tripId }) {
+    const router = useRouter();
     const [code, setCode] = useState('');
     const [sgl, setSgl] = useState('');
     const [dbl, setDbl] = useState('');
@@ -24,11 +27,23 @@ export default function FormSaleBook() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Xử lý gửi dữ liệu
+        console.log('Trip ID:', tripId);
+        console.log('Form data:', { code, sgl, dbl, twn, tpl, note, paid, priority, vote, file });
         alert('Đã gửi sale booking!');
+        
+        // Chuyển đến trang operator
+        router.push('/personal/operator');
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-full  mx-auto p-4 bg-white rounded-lg shadow space-y-6 border border-gray-200">
+        <form onSubmit={handleSubmit} className="w-full mx-auto p-4 bg-white rounded-lg shadow space-y-6 border border-gray-200">
+            {/* Trip ID Display */}
+            {tripId && (
+                <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                    <p className="text-sm font-medium text-blue-900">Booking for Trip: {tripId}</p>
+                </div>
+            )}
+
             {/* Hàng 1 */}
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 md:flex-[2]">
@@ -124,7 +139,15 @@ export default function FormSaleBook() {
                 </div>
             </div>
             {/* Nút gửi */}
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+                <Button 
+                    color="default" 
+                    variant="light" 
+                    size="md"
+                    onClick={() => router.back()}
+                >
+                    Cancel
+                </Button>
                 <Button color="primary" type="submit" size="md">
                     Send to Operator
                 </Button>
@@ -132,3 +155,7 @@ export default function FormSaleBook() {
         </form>
     );
 }
+
+FormSaleBook.propTypes = {
+    tripId: PropTypes.string,
+};
