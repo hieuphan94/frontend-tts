@@ -8,22 +8,29 @@ export const PUBLIC_ROUTES = [
 export const ROUTES = {
   // Operator routes
   personal: '/personal/operator',
+  sale: '/personal/sale',
 };
 
 // 3. Role đơn giản
 export const ROLES = {
   OPERATOR: 'operator',
+  SALE: 'sale',
 };
 
 // 4. Department đơn giản
 export const DEPARTMENTS = {
   OPERATOR: 'operator',
+  SALE: 'sale',
 };
 
 // 5. Phân quyền đơn giản cho operator
 export const DEPARTMENT_PERMISSIONS = {
   [DEPARTMENTS.OPERATOR]: [
     ROUTES.personal,
+    ROUTES.sale,
+  ],
+  [DEPARTMENTS.SALE]: [
+    ROUTES.sale,
   ],
 };
 
@@ -41,8 +48,8 @@ export const hasPermission = (role, department, path) => {
     return false;
   }
   
-  // Operator luôn có quyền truy cập personal
-  if (path.startsWith(ROUTES.personal)) {
+  // Operator luôn có quyền truy cập personal và sale
+  if (path.startsWith(ROUTES.personal) || path.startsWith(ROUTES.sale)) {
     return true;
   }
   

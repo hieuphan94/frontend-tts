@@ -2,12 +2,21 @@
 
 import { getMenuItems } from '@/configs/menuItems';
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Sidebar() {
   const router = useRouter();
+  const pathname = usePathname();
 
   const menuItems = getMenuItems().operator;
+
+  // Determine which menu item is currently active
+  const getActiveKey = () => {
+    if (pathname.includes('/personal/sale')) {
+      return 'sale';
+    }
+    return 'operator'; // Default to operator
+  };
 
   return (
     <div className="bg-white border-r relative">
@@ -22,7 +31,7 @@ export default function Sidebar() {
               router.push(item.href);
             }
           }}
-          selectedKeys={['operator']}
+          selectedKeys={[getActiveKey()]}
         >
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -44,11 +53,12 @@ export default function Sidebar() {
         <div className="flex justify-around p-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const isActive = getActiveKey() === item.key;
             return (
               <button
                 key={item.key}
                 onClick={() => router.push(item.href)}
-                className="p-2 rounded-full text-gray-600"
+                className={`p-2 rounded-full ${isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-600'}`}
               >
                 <Icon className="w-6 h-6" />
               </button>
