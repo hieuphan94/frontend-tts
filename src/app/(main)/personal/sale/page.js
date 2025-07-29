@@ -32,7 +32,27 @@ export default function SalePage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Trip List</h2>
+      {/* header */}
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h1 className="text-xl font-semibold">Trip List</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Hiển thị {data?.length || 0} trip
+          </p>
+        </div>
+        <div className="flex gap-2 items-center">
+          {/* <SearchBar onSearch={() => {}} loading={loading} />
+          <Button
+            isIconOnly
+            variant="light"
+            onPress={() => {}}
+            isLoading={loading}
+            className="p-2"
+          >
+          </Button> */}
+        </div>
+      </div>
+        {/* table */}
       <Table isLoading={loading} aria-label="Trip Table" removeWrapper className="mt-2 text-xs"
         emptyContent={data.length === 0 ? 'No data' : undefined}
       >

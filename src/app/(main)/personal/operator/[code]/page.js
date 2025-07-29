@@ -1,7 +1,7 @@
+'use client';
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { ItineraryTable } from './ItineraryTable';
-import { ServicesTable } from './ServicesTable';
+import { ItineraryTable } from '../components/ItineraryTable';
+import { ServicesTable } from '../components/ServicesTable';
 import { mockDataItineraryTable } from '../data/mockDataBookingDetail';
 
 const tabs = [
@@ -9,7 +9,7 @@ const tabs = [
     { id: 'services', label: 'Services Group' },
 ]
 
-export const BookingDetail = ({ code }) => {
+export default function BookingDetail({ code }) {
     const [activeTab, setActiveTab] = useState('itinerary');
 
     const handleTabChange = (tabId) => {
@@ -104,40 +104,4 @@ export const BookingDetail = ({ code }) => {
             )}
         </div>
     );
-};
-
-BookingDetail.propTypes = {
-    code: PropTypes.string,
-    bookingData: PropTypes.shape({
-        code: PropTypes.string.isRequired,
-        saleName: PropTypes.string.isRequired,
-        startDate: PropTypes.string.isRequired,
-        endDate: PropTypes.string.isRequired,
-        totalPax: PropTypes.number.isRequired,
-        numberOfGroups: PropTypes.number.isRequired,
-        totalPrice: PropTypes.number.isRequired,
-        costActual: PropTypes.number.isRequired,
-        profit: PropTypes.number.isRequired,
-        status: PropTypes.oneOf(['new', 'in-process', 'revised', 'cfm', 'paid', 'cancel']).isRequired,
-        itinerary: PropTypes.arrayOf(
-            PropTypes.shape({
-                day: PropTypes.number,
-                date: PropTypes.string,
-                location: PropTypes.string,
-                activities: PropTypes.string,
-                accommodation: PropTypes.string,
-            })
-        ),
-        serviceGroups: PropTypes.arrayOf(
-            PropTypes.shape({
-                type: PropTypes.string,
-                provider: PropTypes.string,
-                details: PropTypes.string,
-                price: PropTypes.number,
-                status: PropTypes.string,
-            })
-        ),
-    }),
-};
-
-BookingDetail.displayName = 'BookingDetail';
+}

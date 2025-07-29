@@ -14,7 +14,7 @@ export default function OperatorPage() {
   const handleCodeClick = (row) => {
     router.push(`/personal/operator/${row.code}`);
   };
-  
+
   const columns = [
     { key: 'stt', label: 'STT' },
     { key: 'bookingRate', label: 'Booking Rate' },
@@ -37,7 +37,16 @@ export default function OperatorPage() {
 
   return (
     <>
-      <h2 className="text-2xl font-bold mb-4">Booking Table</h2>
+      {/* header */}
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h1 className="text-xl font-semibold">Booking List</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Hiển thị {data?.length || 0} booking
+          </p>
+        </div>
+      </div>
+      {/* table */}
       <div className="mt-8">
         <Table isLoading={loading} aria-label="Booking Table" removeWrapper className="mt-2 text-xs">
           <TableHeader className="text-xs">

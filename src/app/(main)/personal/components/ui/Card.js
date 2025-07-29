@@ -1,7 +1,11 @@
 'use client';
 
 import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
+
+// Hàm cn gộp className, thay thế cho import bị thiếu
+function cn(...classes) {
+  return classes.filter(Boolean).join(' '); 
+}
 
 const Card = forwardRef(({
   className,
