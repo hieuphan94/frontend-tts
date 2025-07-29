@@ -1,59 +1,96 @@
 'use client';
 import { useState } from 'react';
-import { mockData } from './data/mockDataTrip';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { TripTable } from './components/TripTable';
-import FormSaleBook from './components/FormSaleBook';
-import { mockDataOperatorTable } from './data/mockDataOperatorTable';
-import { BookingTable } from './components/BookingTable';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from '@nextui-org/react';
+import PropTypes from 'prop-types';
+import { mockDataBookingTable } from './data/mockDataBookingTable';
+import { useRouter } from 'next/navigation';
 
 export default function OperatorPage() {
-  const [data] = useState(mockData.data);
-  const [loading, setLoading] = useState(false);
-  const [loadingTripIds] = useState({ view: [] });
-
-  const handleView = (trip) => {
-    // Xử lý khi bấm nút Xem
-    alert(`Xem trip: ${trip.title}`);
-  };
+  const [data] = useState(mockDataBookingTable);
+  const router = useRouter();
 
   const handleCodeClick = (row) => {
-    // Xử lý khi bấm nút Code
-    alert(`Xem sale: ${row.code}`);
+    router.push(`/personal/operator/${row.code}`);
   };
 
-  if (loading && !data?.length) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[50vh] p-6">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-        <p className="text-gray-600">Đang tải dữ liệu...</p>
-      </div>
-    );
-  }
+  const columns = [
+    { key: 'bookingRate', label: 'Booking Rate' },
+    { key: 'code', label: 'Code' },
+    { key: 'arrivalDate', label: 'Arrival Date' },
+    { key: 'numberOfDays', label: 'Number of Days' },
+    { key: 'pax', label: 'Pax' },
+    { key: 'priority', label: 'Priority' },
+    { key: 'sale', label: 'Sale' },
+    { key: 'status', label: 'Status' },
+  ];
+
+  const statusColor = {
+    confirmed: 'bg-green-100 text-green-700',
+    pending: 'bg-yellow-100 text-yellow-700',
+    rejected: 'bg-red-100 text-red-700',
+    cancelled: 'bg-gray-100 text-gray-700',
+    '': 'bg-gray-100 text-gray-700',
+  };
 
   return (
     <>
-      <Card className="w-full max-w-7xl mx-auto mt-6">
-        <CardHeader>
-          <CardTitle>Danh sách Trip</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TripTable
-            trips={data}
-            loadingTripIds={loadingTripIds}
-            onView={handleView}
-          />
-        </CardContent>
-      </Card>
+      <h2 className="text-2xl font-bold mb-4">Booking Table</h2>
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Form Sale Book</h2>
-        <FormSaleBook />
-      </div>
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">Operator Table</h2>
-        <BookingTable data={mockDataOperatorTable} onCodeClick={handleCodeClick} />
+        <Table aria-label="Booking Table" removeWrapper className="mt-2 text-xs">
+          <TableHeader className="text-xs">
+            {columns.map((column) => (
+              <TableColumn key={column.key} className="text-xs">{column.label}</TableColumn>
+            ))}
+          </TableHeader>
+          <TableBody emptyContent={data.length === 0 ? 'No data' : undefined} className="text-xs">
+            {data.map((row, idx) => (
+              <TableRow key={row.code || idx} className="text-xs border-b border-gray-300">
+                <TableCell className="text-xs">{(row.bookingRate * 100).toFixed(0)}%</TableCell>
+                <TableCell className="text-xs">
+                  <button
+                    type="button"
+                    className="text-primary hover:underline cursor-pointer px-0.5 py-0.5 rounded"
+                    onClick={() => handleCodeClick(row)}
+                  >
+                    {row.code}
+                  </button>
+                </TableCell>
+                <TableCell className="text-xs">{new Date(row.arrivalDate).toLocaleDateString('vi-VN')}</TableCell>
+                <TableCell className="text-xs">{row.numberOfDays}</TableCell>
+                <TableCell className="text-xs">{row.pax}</TableCell>
+                <TableCell className="text-xs">
+                  {row.priority ? (
+                    <span className="flex items-center justify-center"> ✓ </span>
+                  ) : null}
+                </TableCell>
+                <TableCell className="text-xs">{row.sale}</TableCell>
+                <TableCell className="text-xs">
+                  <span className={`px-2 py-1 rounded-full text-xs ${statusColor[row.status]}`}>
+                    {row.status}
+                  </span>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </>
   );
 }
+
+OperatorPage.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      bookingRate: PropTypes.number,
+      code: PropTypes.string,
+      arrivalDate: PropTypes.string,
+      numberOfDays: PropTypes.number,
+      pax: PropTypes.number,
+      priority: PropTypes.bool,
+      sale: PropTypes.string,
+      status: PropTypes.string,
+    })
+  ).isRequired,
+  onCodeClick: PropTypes.func.isRequired,
+};
+
