@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { mockData } from '../operator/data/mockDataTrip';
+import { mockData } from './data/mockDataTrip';
 import { Table, TableHeader, TableColumn, TableBody, TableCell, TableRow, Button } from '@nextui-org/react';
 import CreateBookOpModal from './components/createBookOpModal';
 
@@ -20,7 +20,7 @@ export default function SalePage() {
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedTrip(null);
-  };
+  }
 
   const statusColor = {
     active: 'bg-green-100 text-green-700',
@@ -52,27 +52,27 @@ export default function SalePage() {
           </Button> */}
         </div>
       </div>
-        {/* table */}
+      {/* table */}
       <Table isLoading={loading} aria-label="Trip Table" removeWrapper className="mt-2 text-xs"
         emptyContent={data.length === 0 ? 'No data' : undefined}
       >
         <TableHeader className="text-xs">
-          <TableColumn key="code" className="text-xs">Code</TableColumn>
-          <TableColumn key="title" className="text-xs">Title</TableColumn>
-          <TableColumn key="startDate" className="text-xs">Start Date</TableColumn>
-          <TableColumn key="endDate" className="text-xs">End Date</TableColumn>
-          <TableColumn key="numberOfDays" className="text-xs">Number of Days</TableColumn>
-          <TableColumn key="globalPax" className="text-xs">Global Pax</TableColumn>
-          <TableColumn key="customer" className="text-xs">Customer</TableColumn>
-          <TableColumn key="createdBy" className="text-xs">Created By</TableColumn>
-          <TableColumn key="createdAt" className="text-xs">Created At</TableColumn>
-          <TableColumn key="totalPrice" className="text-xs">Total Price</TableColumn>
-          <TableColumn key="status" className="text-xs">Status</TableColumn>
-          <TableColumn key="actions" className="text-xs">Actions</TableColumn>
+          <TableColumn key="code">Code</TableColumn>
+          <TableColumn key="title">Title</TableColumn>
+          <TableColumn key="startDate">Start Date</TableColumn>
+          <TableColumn key="endDate">End Date</TableColumn>
+          <TableColumn key="numberOfDays">Number of Days</TableColumn>
+          <TableColumn key="globalPax">Global Pax</TableColumn>
+          <TableColumn key="customer">Customer</TableColumn>
+          <TableColumn key="createdBy">Created By</TableColumn>
+          <TableColumn key="createdAt">Created At</TableColumn>
+          <TableColumn key="totalPrice">Total Price</TableColumn>
+          <TableColumn key="status">Status</TableColumn>
+          <TableColumn key="actions">Actions</TableColumn>
         </TableHeader>
-        <TableBody emptyContent={data.length === 0 ? 'No data' : undefined} className="text-xs">
+        <TableBody emptyContent={data.length === 0 ? 'No data' : undefined}>
           {data.map((trip) => (
-            <TableRow key={trip.id} className="text-xs border-b border-gray-300">
+            <TableRow key={trip.id} className="text-xs text-gray-800 border-b border-gray-300">
               <TableCell className="text-xs">{trip.code}</TableCell>
               <TableCell className="text-xs">{trip.title}</TableCell>
               <TableCell className="text-xs">{new Date(trip.startDate).toLocaleDateString('vi-VN')}</TableCell>

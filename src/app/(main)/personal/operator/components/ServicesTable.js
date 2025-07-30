@@ -3,20 +3,15 @@ import {
   TableHeader,
   TableBody,
   TableColumn,
-  TableRow, 
+  TableRow,
   TableCell,
   Button,
-  Checkbox,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Input,
 } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { memo, useState } from 'react';
 import { mockServicesData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
 import { handlePaymentPercentChange } from '../utils/handlePercentChange';
+import { GroupSelectModal } from './GroupSelectModal';
 
 const columns = [
   { key: 'group', label: 'Group' },
@@ -57,10 +52,6 @@ const mockDataListGroup = [
 export const ServicesTable = memo(({ data = mockServicesData }) => {
   const [servicesData, setServicesData] = useState(data);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalRowId, setModalRowId] = useState(null);
-  const [groupSelections, setGroupSelections] = useState([]);
-  const [groupList, setGroupList] = useState(mockDataListGroup);
-  const [newGroupName, setNewGroupName] = useState('');
 
   // Xử lý thay đổi loại payment
   const handlePaymentChange = (serviceId, value) => {
@@ -96,95 +87,13 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
     }));
   };
 
-  // Mở modal chọn group
-  const handleOpenGroupModal = (row) => {
-    setModalRowId(row.id);
-    const selected = Array.isArray(row.group)
-      ? row.group
-      : (row.group || '').split(',').map(s => s.trim()).filter(Boolean);
-    setGroupSelections(selected);
-    setModalOpen(true);
-  };
-
-  // Lưu group đã chọn
-  const handleSaveGroupSelection = () => {
-    setServicesData(prev =>
-      prev.map(row =>
-        row.id === modalRowId
-          ? { ...row, group: groupSelections.join(', ') }
-          : row
-      )
-    );
-    setModalOpen(false);
-  };
-
-  // Chọn tất cả group
-  const handleSelectAllGroups = () => {
-    setGroupSelections(groupList.map(g => g.name));
-  };
-
-  // Thêm mới group
-  const handleAddNewGroup = () => {
-    if (newGroupName.trim() && !groupList.some(g => g.name === newGroupName.trim())) {
-      setGroupList(prev => [...prev, { id: Date.now(), name: newGroupName.trim() }]);
-      setGroupSelections(prev => [...prev, newGroupName.trim()]);
-      setNewGroupName('');
-    }
-  };
-
 
   return (
     <>
-      {modalOpen && (
-        <Modal isOpen={modalOpen} onOpenChange={setModalOpen}>
-          <ModalContent>
-            <ModalHeader></ModalHeader>
-            <ModalBody>
-              <div className="flex gap-2 items-center mb-2">
-                <Button size="sm" onPress={handleSelectAllGroups}>
-                  All
-                </Button>
-                <Input
-                  size="xs"
-                  value={newGroupName}
-                  onChange={e => setNewGroupName(e.target.value)}
-                  className="text-xs"
-
-                />
-                <Button size="sm" color="primary" onPress={handleAddNewGroup}>
-                  Add new
-                </Button>
-              </div>
-              <div className="flex flex-col gap-1 max-h-40 overflow-y-auto">
-                {groupList.map(g => (
-                  <Checkbox
-                    key={g.id}
-                    size="xs"
-                    value={groupSelections.includes(g.name)}
-                    onValueChange={() => {
-                      if (groupSelections.includes(g.name)) {
-                        setGroupSelections(prev => prev.filter(name => name !== g.name));
-                      } else {
-                        setGroupSelections(prev => [...prev, g.name]);
-                      }
-                    }}
-                  >
-                    {g.name}
-                  </Checkbox>
-                ))}
-              </div>
-              <div className="flex justify-end gap-2 mt-2">
-                <Button size="sm" variant="light" onPress={() => setModalOpen(false)}>
-                  Cancel
-                </Button>
-                <Button size="sm" color="primary" onPress={handleSaveGroupSelection}>
-                  Save
-                </Button>
-              </div>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      )}
+      <GroupSelectModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
       <Table aria-label="Services Table" removeWrapper className="mt-2 text-xs">
         <TableHeader className="text-xs">
           {columns.map((column) => (
@@ -193,11 +102,11 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
         </TableHeader>
         <TableBody emptyContent={servicesData.length === 0 ? 'No data' : undefined} className="text-xs">
           {servicesData.map((row, idx) => (
-            <TableRow key={row.id || idx} className="text-xs border-b border-gray-300">
+            <TableRow key={row.id || idx} className="text-xs text-gray-800 border-b border-gray-300">
               <TableCell className="text-xs">
                 <button
                   className="underline"
-                  onClick={() => handleOpenGroupModal(row)}
+                  onClick={() => setModalOpen(true)}
                   type="button"
                 >
                   {row.group}

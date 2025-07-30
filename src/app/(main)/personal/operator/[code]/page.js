@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { ItineraryTable } from '../components/ItineraryTable';
 import { ServicesTable } from '../components/ServicesTable';
 import { mockDataItineraryTable } from '../data/mockDataBookingDetail';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@nextui-org/react';
+import Link from 'next/link';
+import { ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const tabs = [
     { id: 'itinerary', label: 'Itinerary' },
@@ -11,7 +15,7 @@ const tabs = [
 
 export default function BookingDetail({ code }) {
     const [activeTab, setActiveTab] = useState('itinerary');
-
+    const router = useRouter();
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
     };
@@ -55,6 +59,21 @@ export default function BookingDetail({ code }) {
 
     return (
         <div className='w-full'>
+            {/* Breadcrumb */}
+            <div className="mb-6">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <button
+                        onClick={() => router.back()}
+                        className="hover:text-primary flex items-center gap-1"
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                        Back
+                    </button>
+                    <span>/</span>
+                    <span>Booking Detail</span>
+                </div>
+            </div>
+            {/* Booking Info */}
             <div className="mb-6">
                 <div className="bg-white rounded-lg border border-gray-200 p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -63,9 +82,9 @@ export default function BookingDetail({ code }) {
                                 <div key={field.label} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center justify-between">
-                                            <p className="text-sm font-medium text-gray-900">{field.label}</p>
+                                            <p className="text-sm  text-gray-700">{field.label}</p>
                                         </div>
-                                        <p className="text-sm text-gray-700 mt-1 font-semibold">
+                                        <p className="text-sm text-gray-900 mt-1 font-semibold">
                                             {field.value}
                                         </p>
                                     </div>
@@ -76,6 +95,7 @@ export default function BookingDetail({ code }) {
                 </div>
             </div>
 
+            {/* Tabs */}
             <div className="flex gap-4 mb-2 border-b border-gray-200">
                 {tabs.map((tab) => (
                     <button

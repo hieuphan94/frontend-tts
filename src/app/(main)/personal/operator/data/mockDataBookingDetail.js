@@ -2,7 +2,7 @@ export const mockDataItineraryTable = [
   {
     id: 1,
     day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Hotel - dbl sup",
+    service: "Hotel - dbl sup - Hotel - dbl sup",
     quantity: 3,
     unitPrice: 800,
     total: 2400,
@@ -13,7 +13,7 @@ export const mockDataItineraryTable = [
   {
     id: 2,
     day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Hotel - sgl sup",
+    service: "Hotel - sgl sup - Hotel - sgl sup",
     quantity: 1,
     unitPrice: 750,
     total: 750,
@@ -24,7 +24,7 @@ export const mockDataItineraryTable = [
   {
     id: 3,
     day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Visit",
+    service: "Visit - Hotel - dbl sup - dbl sup",
     quantity: 7,
     unitPrice: 100,
     total: 700,
@@ -35,7 +35,7 @@ export const mockDataItineraryTable = [
   {
     id: 4,
     day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Guide",
+    service: "Guide - Hotel - dbl sup - dbl sup",
     quantity: 1,
     unitPrice: "-",
     total: "-",
@@ -46,7 +46,7 @@ export const mockDataItineraryTable = [
   {
     id: 5,
     day: "Day 2: Hanoi - Ninh Binh (2/7)",
-    service: "Transport - Bus",
+    service: "Transport - Bus - Guide - Hotel - dbl sup - dbl sup ",
     quantity: 1,
     unitPrice: 500,
     total: 500,
@@ -57,7 +57,7 @@ export const mockDataItineraryTable = [
   {
     id: 6,
     day: "Day 2: Hanoi - Ninh Binh (2/7)",
-    service: "Hotel - dbl sup",
+    service: "Hotel - dbl sup - dbl sup- Hotel - dbl sup - dbl sup - Hotel - dbl sup - dbl sup",
     quantity: 2,
     unitPrice: 650,
     total: 1300,
