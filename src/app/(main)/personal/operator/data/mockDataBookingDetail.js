@@ -1,77 +1,75 @@
-export const mockDataItineraryTable = [
-  {
-    id: 1,
-    day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Hotel - dbl sup - Hotel - dbl sup",
-    quantity: 3,
-    unitPrice: 800,
-    total: 2400,
-    cost: 2400,
-    payment: "CK",
-    status: "In process"
-  },
-  {
-    id: 2,
-    day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Hotel - sgl sup - Hotel - sgl sup",
-    quantity: 1,
-    unitPrice: 750,
-    total: 750,
-    cost: 750,
-    payment: "CK",
-    status: "In process"
-  },
-  {
-    id: 3,
-    day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Visit - Hotel - dbl sup - dbl sup",
-    quantity: 7,
-    unitPrice: 100,
-    total: 700,
-    cost: 700,
-    payment: "TM",
-    status: "New"
-  },
-  {
-    id: 4,
-    day: "Day 1: Hanoi Arrival (1/7)",
-    service: "Guide - Hotel - dbl sup - dbl sup",
-    quantity: 1,
-    unitPrice: "-",
-    total: "-",
-    cost: "-",
-    payment: "-",
-    status: "CFM"
-  },
-  {
-    id: 5,
-    day: "Day 2: Hanoi - Ninh Binh (2/7)",
-    service: "Transport - Bus - Guide - Hotel - dbl sup - dbl sup ",
-    quantity: 1,
-    unitPrice: 500,
-    total: 500,
-    cost: 500,
-    payment: "CK",
-    status: "Confirmed"
-  },
-  {
-    id: 6,
-    day: "Day 2: Hanoi - Ninh Binh (2/7)",
-    service: "Hotel - dbl sup - dbl sup- Hotel - dbl sup - dbl sup - Hotel - dbl sup - dbl sup",
-    quantity: 2,
-    unitPrice: 650,
-    total: 1300,
-    cost: 1300,
-    payment: "CK",
-    status: "In process"
-  }
-];
+  export const mockDataItineraryTable = [
+    {
+      id: 1,
+      day: "Day 1: Hanoi Arrival (1/7)",
+      service: "Service 1, Service 2, Service 3",
+      quantity: 3,
+      unitPrice: 800,
+      total: 2400,
+      cost: 2400,
+      payment: "CK",
+      status: "In process"
+    },
+    {
+      id: 2,
+      day: "Day 2: Hanoi Arrival (1/7)",
+      service: "Service 1, Service 2, Service 3",
+      quantity: 1,
+      unitPrice: 750,
+      total: 750,
+      cost: 750,
+      payment: "CK",
+      status: "In process"
+    },
+    {
+      id: 3,
+      day: "Day 3: Hanoi Arrival (1/7)",
+      service: "Service 1, Service 2, Service 3",
+      quantity: 7,
+      unitPrice: 100,
+      total: 700,
+      cost: 700,
+      payment: "TM",
+      status: "New"
+    },
+    {
+      id: 4,
+      day: "Day 4: Hanoi Arrival (1/7)",
+      service: "Service 1, Service 2, Service 3, Service 4, Service 5, Service 6",
+      quantity: 1,
+      unitPrice: "-",
+      total: "-",
+      cost: "-",
+      payment: "-",
+      status: "CFM"
+    },
+    {
+      id: 5,
+      day: "Day 5: Hanoi - Ninh Binh (2/7)",
+      service: "Service 4, Service 5, Service 6",
+      quantity: 1,
+      unitPrice: 500,
+      total: 500,
+      cost: 500,
+      payment: "CK",
+      status: "Confirmed"
+    },
+    {
+      id: 6,
+      day: "Day 6: Hanoi - Ninh Binh (2/7)",
+      service: "Service 7, Service 8, Service 9",
+      quantity: 2,
+      unitPrice: 650,
+      total: 1300,
+      cost: 1300,
+      payment: "CK",
+      status: "In process"
+    }
+  ];
 
 export const paymentOptions = [
   { key: 'CK', label: 'CK' },
   { key: 'TM', label: 'TM' },
-  { key: 'TM/CK', label: 'TM/CK' },
-  { key: '-', label: '-' },
 ];
 
 // Status options
@@ -87,7 +85,7 @@ export const statusOptions = [
 export const mockServicesData = [
   {
     id: 1,
-    group: ' Legend',
+    group: 'Hotel',
     quantity: 4,
     unitPrice: 800,
     total: 3200,
@@ -100,7 +98,7 @@ export const mockServicesData = [
   },
   {
     id: 2,
-    group: ' Acros',
+    group: 'Food',
     quantity: 8,
     unitPrice: 150,
     total: 1200,
@@ -113,7 +111,7 @@ export const mockServicesData = [
   },
   {
     id: 3,
-    group: ' Vinpearl',
+    group: 'Guile',
     quantity: 24,
     unitPrice: 200,
     total: 4800,
@@ -126,7 +124,7 @@ export const mockServicesData = [
   },
   {
     id: 4,
-    group: ' InterContinental',
+    group: 'Entertainment',
     quantity: 3,
     unitPrice: 500,
     total: 1500,

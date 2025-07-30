@@ -9,9 +9,8 @@ import {
 } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { memo, useState } from 'react';
-import { mockServicesData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
-import { handlePaymentPercentChange } from '../utils/handlePercentChange';
-import { GroupSelectModal } from './GroupSelectModal';
+import { mockDataService, mockServicesData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
+import ServiceMultiSelect from './ServiceMultiSelect';
 
 const columns = [
   { key: 'group', label: 'Group' },
@@ -25,33 +24,8 @@ const columns = [
   { key: 'notes', label: 'Notes' },
 ];
 
-const mockDataListGroup = [
-  {
-    id: 1,
-    name: 'Mường Thanh',
-  },
-  {
-    id: 2,
-    name: 'Legend',
-  },
-  {
-    id: 3,
-    name: 'Acros',
-  },
-
-  {
-    id: 4,
-    name: 'Vinpearl',
-  },
-  {
-    id: 5,
-    name: 'InterContinental',
-  },
-];
-
 export const ServicesTable = memo(({ data = mockServicesData }) => {
   const [servicesData, setServicesData] = useState(data);
-  const [modalOpen, setModalOpen] = useState(false);
 
   // Xử lý thay đổi loại payment
   const handlePaymentChange = (serviceId, value) => {
@@ -90,10 +64,6 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
 
   return (
     <>
-      <GroupSelectModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
       <Table aria-label="Services Table" removeWrapper className="mt-2 text-xs">
         <TableHeader className="text-xs">
           {columns.map((column) => (
@@ -103,14 +73,16 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
         <TableBody emptyContent={servicesData.length === 0 ? 'No data' : undefined} className="text-xs">
           {servicesData.map((row, idx) => (
             <TableRow key={row.id || idx} className="text-xs text-gray-800 border-b border-gray-300">
-              <TableCell className="text-xs">
-                <button
-                  className="underline"
-                  onClick={() => setModalOpen(true)}
-                  type="button"
-                >
-                  {row.group}
-                </button>
+              <TableCell className="text-xs w-1/4">
+                <div className="flex flex-col gap-1">
+                  <div className="text-xs font-medium text-gray-800">{row.group}</div>
+                  <ServiceMultiSelect
+                    value={row.service}
+                    onChange={(value) => handleServiceChange(row.id, value)}
+                    options={mockDataService}
+                    placeholder="Select group"
+                  />
+                </div>
               </TableCell>
               <TableCell className="text-xs">{row.quantity}</TableCell>
               <TableCell className="text-xs">{row.unitPrice}</TableCell>
@@ -119,7 +91,7 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
                 <input
                   type="number"
                   value={row.cost}
-                  className="w-1/2   text-xs p-1 border rounded"
+                  className="text-xs p-1 border rounded w-25"
                   onChange={e => handleCostChange(row.id, e.target.value)}
                 />
               </TableCell>
@@ -139,44 +111,15 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
                   </select>
 
                   {/* Input phần trăm */}
-                  {row.payment === 'TM/CK' ? (
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={row.paymentPercent?.CK || 0}
-                          onChange={e => handlePaymentPercentChange(row.id, 'CK', e.target.value)}
-                          className="w-14 border rounded px-1 py-0.5 text-xs text-right"
-                        />
-                        <span className="text-xs text-gray-600">% CK</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          value={row.paymentPercent?.TM || 0}
-                          onChange={e => handlePaymentPercentChange(row.id, 'TM', e.target.value)}
-                          className="w-14 border rounded px-1 py-0.5 text-xs text-right"
-                        />
-                        <span className="text-xs text-gray-600">% TM</span>
-                      </div>
-                    </div>
-                  ) : row.payment === 'CK' || row.payment === 'TM' ? (
-                    <div className="flex items-center gap-1">
-                      <input
-                        type="number"
-                        min={0}
-                        max={100}
-                        value={row.payment === 'CK' ? (row.paymentPercent?.CK || 0) : (row.paymentPercent?.TM || 0)}
-                        onChange={e => handlePaymentPercentChange(row.id, row.payment, e.target.value)}
-                        className="w-14 border rounded px-1 py-0.5 text-xs text-right"
-                      />
-                      <span className="text-xs text-gray-600">% {row.payment}</span>
-                    </div>
-                  ) : null}
+                  <div className="flex items-center gap-1">
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      className="w-14 border rounded px-1 py-0.5 text-xs text-right"
+                    />
+                    <span className="text-xs text-gray-600">%</span>
+                  </div>
                 </div>
               </TableCell>
 
