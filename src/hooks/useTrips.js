@@ -70,7 +70,8 @@ export const useTrips = () => {
           includeInactive: role === 'admin' ? 'true' : 'false'
         };
 
-        const response = await tripsApi.getAllTrips(queryParams);
+        // const response = await tripsApi.getAllTrips(queryParams);
+        const response = await tripsApi.getAllTripsTest(queryParams);
         const data = response.data;
 
         dispatch(updateCache({

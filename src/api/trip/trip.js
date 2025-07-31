@@ -1,8 +1,14 @@
 import axiosInstance from '@/api/config/axios';
+import axios from 'axios';
 
 export const tripsApi = {
   getAllTrips: async (params) => {
     const response = await axiosInstance.get('/trips', { params });
+    return response.data;
+  },
+
+  getAllTripsTest: async (params) => {
+    const response = await axios.get('/api/trips/test/all', { params });;
     return response.data;
   },
 
