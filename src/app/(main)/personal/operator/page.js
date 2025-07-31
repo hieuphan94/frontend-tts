@@ -56,7 +56,7 @@ export default function OperatorPage() {
       {/* header */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-xl font-semibold">Booking List</h1>
+          <h1 className="text-xl text-gray-800 font-semibold">Booking List</h1>
           <p className="text-sm text-gray-500 mt-1">
             Displaying {data?.length || 0} bookings
           </p>

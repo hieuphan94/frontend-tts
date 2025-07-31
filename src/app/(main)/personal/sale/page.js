@@ -35,21 +35,10 @@ export default function SalePage() {
       {/* header */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-xl font-semibold">Trip List</h1>
+          <h1 className="text-xl text-gray-800 font-semibold">Trip List</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Hiển thị {data?.length || 0} trip
+            Displaying {data?.length || 0} trips
           </p>
-        </div>
-        <div className="flex gap-2 items-center">
-          {/* <SearchBar onSearch={() => {}} loading={loading} />
-          <Button
-            isIconOnly
-            variant="light"
-            onPress={() => {}}
-            isLoading={loading}
-            className="p-2"
-          >
-          </Button> */}
         </div>
       </div>
       {/* table */}

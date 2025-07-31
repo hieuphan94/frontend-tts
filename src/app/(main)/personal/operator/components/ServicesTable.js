@@ -9,57 +9,93 @@ import {
 } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { memo, useState } from 'react';
-import { mockDataService, mockServicesData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
-import ServiceMultiSelect from './ServiceMultiSelect';
+import { mockGroupedData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
+import { colorStatusBooking } from '../utils/colorStatusBooking';
+import { ChevronDownIcon, Replace } from 'lucide-react';
 
 const columns = [
-  { key: 'group', label: 'Group' },
+  { key: 'day', label: 'Day ' },
   { key: 'quantity', label: 'SL' },
   { key: 'unitPrice', label: 'Unit Price' },
   { key: 'total', label: 'Total' },
   { key: 'cost', label: 'Cost' },
   { key: 'payment', label: 'Payment' },
   { key: 'status', label: 'Status' },
-  { key: 'book', label: 'Book' },
   { key: 'notes', label: 'Notes' },
 ];
 
-export const ServicesTable = memo(({ data = mockServicesData }) => {
+export const ServicesTable = memo(({ data = mockGroupedData }) => {
   const [servicesData, setServicesData] = useState(data);
+  const [collapsedGroups, setCollapsedGroups] = useState(new Set());
+
+  const toggleGroup = (groupId) => {
+    setCollapsedGroups(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(groupId)) {
+        newSet.delete(groupId);
+      } else {
+        newSet.add(groupId);
+      }
+      return newSet;
+    });
+  };
 
   // Xử lý thay đổi loại payment
-  const handlePaymentChange = (serviceId, value) => {
-    setServicesData(prevData => prevData.map(service => {
-      if (service.id === serviceId) {
+  const handlePaymentChange = (groupId, serviceId, value) => {
+    setServicesData(prevData => prevData.map(group => {
+      if (group.id === groupId) {
         return {
-          ...service,
-          payment: value,
-          paymentPercent: { CK: 0, TM: 0 },
+          ...group,
+          services: group.services.map(service => {
+            if (service.id === serviceId) {
+              return {
+                ...service,
+                payment: value,
+                paymentPercent: { CK: 0, TM: 0 },
+              };
+            }
+            return service;
+          })
         };
       }
-      return service;
+      return group;
     }));
   };
 
-  const handleStatusChange = (serviceId, value) => {
-
-    setServicesData(prevData => prevData.map(service => {
-      if (service.id === serviceId) {
-        return { ...service, status: value };
+  const handleStatusChange = (groupId, serviceId, value) => {
+    setServicesData(prevData => prevData.map(group => {
+      if (group.id === groupId) {
+        return {
+          ...group,
+          services: group.services.map(service => {
+            if (service.id === serviceId) {
+              return { ...service, status: value };
+            }
+            return service;
+          })
+        };
       }
-      return service;
+      return group;
     }));
   };
 
-  const handleCostChange = (serviceId, value) => {
-
-    setServicesData(prevData => prevData.map(service => {
-      if (service.id === serviceId) {
-        return { ...service, cost: value };
+  const handleCostChange = (groupId, serviceId, value) => {
+    setServicesData(prevData => prevData.map(group => {
+      if (group.id === groupId) {
+        return {
+          ...group,
+          services: group.services.map(service => {
+            if (service.id === serviceId) {
+              return { ...service, cost: value };
+            }
+            return service;
+          })
+        };
       }
-      return service;
+      return group;
     }));
   };
+
 
 
   return (
@@ -71,117 +107,135 @@ export const ServicesTable = memo(({ data = mockServicesData }) => {
           ))}
         </TableHeader>
         <TableBody emptyContent={servicesData.length === 0 ? 'No data' : undefined} className="text-xs">
-          {servicesData.map((row, idx) => (
-            <TableRow key={row.id || idx} className="text-xs text-gray-800 border-b border-gray-300">
-              <TableCell className="text-xs w-1/4">
-                <div className="flex flex-col gap-1">
-                  <div className="text-xs font-medium text-gray-800">{row.group}</div>
-                  <ServiceMultiSelect
-                    value={row.service}
-                    onChange={(value) => handleServiceChange(row.id, value)}
-                    options={mockDataService}
-                    placeholder="Select group"
-                  />
-                </div>
-              </TableCell>
-              <TableCell className="text-xs">{row.quantity}</TableCell>
-              <TableCell className="text-xs">{row.unitPrice}</TableCell>
-              <TableCell className="text-xs">{row.total}</TableCell>
-              <TableCell className="text-xs">
-                <input
-                  type="number"
-                  value={row.cost}
-                  className="text-xs p-1 border rounded w-25"
-                  onChange={e => handleCostChange(row.id, e.target.value)}
-                />
-              </TableCell>
-              <TableCell className="text-xs">
-                <div className="flex items-center gap-2">
-                  {/* Dropdown chọn loại payment */}
-                  <select
-                    className="border rounded px-2 py-1 text-xs"
-                    value={row.payment}
-                    onChange={e => handlePaymentChange(row.id, e.target.value)}
-                  >
-                    {paymentOptions.map(opt => (
-                      <option key={opt.key} value={opt.key}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
+          {servicesData.map((group) => (
+            <>
+              {/* Group Header Row */}
+              <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-200">
+                <TableCell
+                  colSpan={8}
+                  className="text-xs font-bold text-gray-800 py-2 cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => toggleGroup(group.id)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 flex items-center justify-center text-gray-600">
+                        <ChevronDownIcon className={`w-3 h-3 transition-transform ${collapsedGroups.has(group.id) ? '' : 'rotate-360'}`} />
+                      </div>
+                      <span>{group.day}</span>
+                      <span className="text-xs text-gray-800 font-medium">
+                        ({group.services.length} services)
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-4 text-xs">
+                      <div className="flex items-center gap-1">
+                        <span className="text-blue-600">Giá hệ thống:</span>
+                        <span className="font-bold">{group.totalSale || '0'}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-green-600">Giá bán:</span>
+                        <span className="font-bold">{group.totalCost || '0'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </TableCell>
+              </TableRow>
 
-                  {/* Input phần trăm */}
-                  <div className="flex items-center gap-1">
+              {/* Service Rows */}
+              {!collapsedGroups.has(group.id) && group.services.map((service) => (
+                <TableRow key={service.id} className="text-xs text-gray-800 border-b border-gray-100">
+                  <TableCell className="text-xs w-[400px] max-w-[400px]">
+                    <div className="w-full">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleReplaceService(group.id, service.id)}
+                          className="w-4 h-4 flex items-center justify-center text-gray-500 hover:text-blue-600 transition-colors"
+                        >
+                          <Replace className="w-4 h-4" />
+                        </button>
+                        <div className="text-xs text-gray-800 break-words leading-tight">
+                          {service.service}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <div className="text-xs font-medium">
+                      {service.quantity}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <div className="text-xs font-medium">
+                      {service.unitPrice}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <div className="text-xs font-medium">
+                      {service.total}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-xs">
                     <input
                       type="number"
-                      min={0}
-                      max={100}
-                      className="w-14 border rounded px-1 py-0.5 text-xs text-right"
+                      value={service.cost}
+                      className="w-20 text-xs p-1 border rounded"
+                      onChange={e => handleCostChange(group.id, service.id, e.target.value)}
                     />
-                    <span className="text-xs text-gray-600">%</span>
-                  </div>
-                </div>
-              </TableCell>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <div className="flex items-center gap-2">
+                      <select
+                        className="border rounded px-2 py-1 text-xs font-medium"
+                        value={service.payment}
+                        onChange={e => handlePaymentChange(group.id, service.id, e.target.value)}
+                      >
+                        {paymentOptions.map(opt => (
+                          <option key={opt.key} value={opt.key}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
 
-              <TableCell className="text-xs">
-                <div className="flex items-center gap-2">
-                  <select
-                    className="border rounded px-2 py-1 text-xs"
-                    value={row.status}
-                    onChange={e => handleStatusChange(row.id, e.target.value)}
-                  >
-                    {statusOptions.map(opt => (
-                      <option key={opt.key} value={opt.key}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </TableCell>
-              <TableCell className="text-xs">
-                <textarea
-                  value={row.notes}
-                  onChangeText={() => { }}
-                  className="w-full text-xs p-1 border rounded resize-none"
-                  rows={1}
-                />
-              </TableCell>
-              <TableCell className="text-xs">
-                <Button
-                  isIconOnly
-                  size="sm"
-                  className="text-xs w-full"
-                  color="primary"
-                  variant="solid"
-                  aria-label="Book to Op"
-                >
-                  <span className="text-xs">Book</span>
-                </Button>
-              </TableCell>
-            </TableRow>
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          className="w-12 border rounded px-1 py-0.5 text-xs"
+                        />
+                        <span className="text-xs text-gray-600">%</span>
+                      </div>
+                    </div>
+                  </TableCell>
+
+                  <TableCell className="text-xs">
+                    <select
+                      className={`border rounded px-2 py-1 text-xs font-medium ${colorStatusBooking(service.status)}`}
+                      value={service.status}
+                      onChange={e => handleStatusChange(group.id, service.id, e.target.value)}
+                    >
+                      {statusOptions.map(opt => (
+                        <option key={opt.key} value={opt.key}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <textarea
+                      value={service.notes}
+                      onChange={(e) => {
+                        // Handle notes change
+                      }}
+                      className="w-full text-xs p-1 border rounded resize-none"
+                      rows={1}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </>
           ))}
         </TableBody>
-
       </Table>
     </>
   );
 });
-
-ServicesTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      group: PropTypes.string,
-      quantity: PropTypes.number,
-      unitPrice: PropTypes.string,
-      total: PropTypes.string,
-      cost: PropTypes.string,
-      payment: PropTypes.string,
-      status: PropTypes.string,
-      book: PropTypes.bool,
-      notes: PropTypes.string,
-    })
-  ),
-};
-
-ServicesTable.displayName = 'ServicesTable';

@@ -18,10 +18,10 @@ const formatSelectedServices = (services) => {
 };
 
 // Reusable ServiceMultiSelect Component
-const ServiceMultiSelect = memo(({ 
-    value, 
-    onChange, 
-    options = [], 
+const ServiceMultiSelect = memo(({
+    value,
+    onChange,
+    options = [],
     placeholder = 'Chọn dịch vụ',
     showTotalPrice = true,
 }) => {
@@ -32,13 +32,13 @@ const ServiceMultiSelect = memo(({
     const handleToggleService = (serviceName) => {
         const isSelected = selectedServices.includes(serviceName);
         let newServices;
-        
+
         if (isSelected) {
             newServices = selectedServices.filter(s => s !== serviceName);
         } else {
             newServices = [...selectedServices, serviceName];
         }
-        
+
         onChange(formatSelectedServices(newServices));
     };
 
@@ -70,13 +70,15 @@ const ServiceMultiSelect = memo(({
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full text-left border border-gray-300 rounded px-2 py-1 text-xs hover:border-primary-500 flex justify-between items-center"
+                className="w-full text-left border border-gray-300 rounded px-2 py-1 text-xs hover:border-primary-500 flex justify-between items-start"
             >
-                <span className="truncate">
-                    {value || placeholder}
-                </span>
+                <div className="flex-1 min-w-0 pr-2">
+                    <div className={`break-words leading-tight ${value ? 'font-medium' : 'text-gray-500'}`}>
+                        {value || placeholder}
+                    </div>
+                </div>
                 <svg
-                    className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                    className={`w-3 h-3 transition-transform flex-shrink-0 mt-0.5 ${isOpen ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
