@@ -1,103 +1,143 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { mockData } from './data/mockDataTrip';
-import { Table, TableHeader, TableColumn, TableBody, TableCell, TableRow, Button } from '@nextui-org/react';
+import { Table, TableHeader, TableColumn, TableBody, TableCell, TableRow, Button, Pagination } from '@nextui-org/react';
+import { useTrips } from '@/hooks/useTrips';
 import CreateBookOpModal from './components/createBookOpModal';
+import ColumnVisibilityModal from './components/ColumnVisibilityModal';
+import { FilterIcon } from 'lucide-react';
+import { colorStatusRequest } from './utils/colorStatusRequest';
 
 export default function SalePage() {
-  const [data] = useState(mockData.data);
-  const [openModal, setOpenModal] = useState(false);
+  const [openBookOpModal, setOpenBookOpModal] = useState(false);
+  const [openColumnVisibilityModal, setOpenColumnVisibilityModal] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const { fetchTrips, loading, trips, pagination } = useTrips();
+  useEffect(() => {
+    fetchTrips({
+      page: currentPage,
+      limit: pageSize,
+    });
+  }, [currentPage, pageSize]);
 
-
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+    setCurrentPage(1); // Reset về trang 1 khi đổi pageSize
+  };
 
   const handleViewBooking = (trip) => {
     setSelectedTrip(trip);
-    setOpenModal(true);
+    setOpenBookOpModal(true);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
+    setOpenBookOpModal(false);
     setSelectedTrip(null);
   }
-
-  const statusColor = {
-    active: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    cancelled: 'bg-red-100 text-red-700',
-    completed: 'bg-blue-100 text-blue-700',
-    '': 'bg-gray-100 text-gray-700',
-  };
 
   return (
     <div>
       {/* header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
+        <h1 className="text-xl text-gray-800 font-semibold">Request List</h1>
         <div>
-          <h1 className="text-xl text-gray-800 font-semibold">Trip List</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Displaying {data?.length || 0} trips
-          </p>
+          <Button onPress={() => setOpenColumnVisibilityModal(true)} isIconOnly variant="faded" color="gray">
+            <FilterIcon className="w-4 h-4" />
+          </Button>
         </div>
       </div>
-      {/* table */}
-      <Table isLoading={loading} aria-label="Trip Table" removeWrapper className="mt-2 text-xs"
-        emptyContent={data.length === 0 ? 'No data' : undefined}
-      >
-        <TableHeader className="text-xs">
-          <TableColumn key="code">Code</TableColumn>
-          <TableColumn key="title">Title</TableColumn>
-          <TableColumn key="startDate">Start Date</TableColumn>
-          <TableColumn key="endDate">End Date</TableColumn>
-          <TableColumn key="numberOfDays">Number of Days</TableColumn>
-          <TableColumn key="globalPax">Global Pax</TableColumn>
-          <TableColumn key="customer">Customer</TableColumn>
-          <TableColumn key="createdBy">Created By</TableColumn>
-          <TableColumn key="createdAt">Created At</TableColumn>
-          <TableColumn key="totalPrice">Total Price</TableColumn>
-          <TableColumn key="status">Status</TableColumn>
-          <TableColumn key="actions">Actions</TableColumn>
-        </TableHeader>
-        <TableBody emptyContent={data.length === 0 ? 'No data' : undefined}>
-          {data.map((trip) => (
-            <TableRow key={trip.id} className="text-xs text-gray-800 border-b border-gray-300">
-              <TableCell className="text-xs">{trip.code}</TableCell>
-              <TableCell className="text-xs">{trip.title}</TableCell>
-              <TableCell className="text-xs">{new Date(trip.startDate).toLocaleDateString('vi-VN')}</TableCell>
-              <TableCell className="text-xs">{new Date(trip.endDate).toLocaleDateString('vi-VN')}</TableCell>
-              <TableCell className="text-xs">{trip.settings?.numberOfDays}</TableCell>
-              <TableCell className="text-xs">{trip.settings?.globalPax}</TableCell>
-              <TableCell className="text-xs">{trip.customerInfo?.name}</TableCell>
-              <TableCell className="text-xs">{trip.internalInfo?.createdBy}</TableCell>
-              <TableCell className="text-xs">{trip.internalInfo?.createdAt ? new Date(trip.internalInfo.createdAt).toLocaleDateString('vi-VN') : ''}</TableCell>
-              <TableCell className="text-xs">{trip.totalPrice?.toLocaleString()} đ</TableCell>
-              <TableCell className="text-xs">
-                <span className={`px-2 py-1 rounded-full text-xs ${statusColor[trip.status.current] || statusColor['']}`}>
-                  {trip.status.current}
-                </span>
-              </TableCell>
-              <TableCell className="text-xs">
-                <Button
-                  isIconOnly
-                  size="sm"
-                  className="text-xs w-full"
-                  color="primary"
-                  variant="solid"
-                  aria-label="Book to Op"
-                  onPress={() => handleViewBooking(trip)}
-                >
-                  <span className="text-xs">Book to Op</span>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      {/* Table scrollable */}
+      <div className=" ">
+        <div className="overflow-y-auto" style={{ maxHeight: 500 }}>
+          <Table
+            isLoading={loading}
+            aria-label="Trip Table"
+            removeWrapper
+            className="text-xs min-w-full"
+          >
+            <TableHeader className="text-xs">
+              <TableColumn key="code">Code</TableColumn>
+              <TableColumn key="title">Title</TableColumn>
+              <TableColumn key="numberOfDays">Days</TableColumn>
+              <TableColumn key="globalPax" >Global Pax</TableColumn>
+              <TableColumn key="customer">Customer</TableColumn>
+              <TableColumn key="createdAt">Created At</TableColumn>
+              <TableColumn key="totalPrice">Total Price</TableColumn>
+              <TableColumn key="status">Status</TableColumn>
+              <TableColumn key="actions">Actions</TableColumn>
+            </TableHeader>
+            <TableBody emptyContent={(!trips || trips.length === 0) ? 'No data' : undefined}>
+              {trips && trips.map((trip) => (
+                <TableRow key={trip.id} className="text-xs text-gray-800 border-b border-gray-300">
+                  <TableCell className="text-xs font-semibold">{trip.code}</TableCell>
+                  <TableCell className="text-xs">{trip.title}</TableCell>
+                  <TableCell className="text-xs">{trip.settings?.numberOfDays}</TableCell>
+                  <TableCell className="text-xs">{trip.settings?.globalPax}</TableCell>
+                  <TableCell className="text-xs">{trip.customerInfo?.name }</TableCell>
+                  <TableCell className="text-xs">{trip.internalInfo?.createdAt ? new Date(trip.internalInfo.createdAt).toLocaleDateString('vi-VN') : ''}</TableCell>
+                  <TableCell className="text-xs">{trip.totalPrice}</TableCell>
+                  <TableCell className="text-xs">
+                    <span className={`px-2 py-1 rounded-full text-xs ${colorStatusRequest[trip.status.current] || colorStatusRequest['']}`}>
+                      {trip.status.current}
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-xs">
+                    <Button
+                      size="sm"
+                      className="text-xs"
+                      color="primary"
+                      variant="solid"
+                      aria-label="Book to Op"
+                      onPress={() => handleViewBooking(trip)}
+                    >
+                      <span className="text-xs">Book to Op</span>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+        {/* Pagination + Page size selector fixed below table */}
+        <div className="flex items-center justify-between gap-4 px-2 py-3 border-t">
+          <div>
+            <p className="text-xs text-gray-500 mt-1">
+              Displaying {pagination?.total || 0} requests
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-xs">
+              <span>
+                Hiển thị:
+              </span>
+              <select
+                className="border rounded px-2 py-1"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+              >
+                {[5, 10, 20, 50].map(size => (
+                  <option key={size} value={size}>{size}</option>
+                ))}
+              </select>
+            </div>
+            <Pagination
+              page={pagination?.page || 1}
+              total={pagination?.totalPages || 1}
+              onChange={setCurrentPage}
+              showControls
+            />
+          </div>
+        </div>
+      </div>
       <CreateBookOpModal
         trip={selectedTrip}
-        open={openModal}
+        open={openBookOpModal}
         onClose={handleCloseModal}
+      />
+      <ColumnVisibilityModal
+        open={openColumnVisibilityModal}
+        onClose={() => setOpenColumnVisibilityModal(false)}
       />
     </div>
   );
