@@ -10,7 +10,7 @@ import {
 } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { memo, useState, useEffect } from 'react';
-import { mockGroupedData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
+import { paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
 import { colorStatusBooking } from '../utils/colorStatusBooking';
 import { ChevronDownIcon, Replace } from 'lucide-react';
 
@@ -24,7 +24,7 @@ const columnsItineraryTable = [
     { key: 'status', label: 'Status' },
 ];
 
-export const ItineraryTable = memo(({ data = mockGroupedData }) => {
+export const ItineraryTable = memo(({ data }) => {
     const [tableData, setTableData] = useState(data);
     const [collapsedGroups, setCollapsedGroups] = useState(new Set());
 
@@ -130,19 +130,19 @@ export const ItineraryTable = memo(({ data = mockGroupedData }) => {
                                             <div className="w-4 h-4 flex items-center justify-center text-gray-600">
                                                 <ChevronDownIcon className={`w-3 h-3 transition-transform ${collapsedGroups.has(group.id) ? '' : 'rotate-360'}`} />
                                             </div>
-                                            <span>{group.day}</span>
-                                            <span className="text-xs text-gray-800 font-medium">
-                                                ({group.services.length} services)
-                                            </span>
+                                            <span>{group.order} - {group.titleOfDay}</span>
+                                            {/* <span className="text-xs text-gray-800 font-medium">
+                                                ({group.length} services)
+                                            </span> */}
                                         </div>
                                         <div className="flex items-center gap-4 text-xs">
                                             <div className="flex items-center gap-1">
                                                 <span className="text-blue-600">Giá hệ thống:</span>
-                                                <span className="font-bold">{group.totalSale?.toLocaleString() || '0'}</span>
+                                                <span className="font-bold">{group?.priceTotal}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <span className="text-green-600">Giá bán:</span>
-                                                <span className="font-bold">{group.totalCost?.toLocaleString() || '0'}</span>
+                                                <span className="font-bold">{group.priceTotal}</span>
                                             </div>
                                         </div>
                                     </div>

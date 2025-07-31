@@ -1,60 +1,38 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ItineraryTable } from '../components/ItineraryTable';
 import { ServicesTable } from '../components/ServicesTable';
 import { mockDataItineraryTable } from '../data/mockDataBookingDetail';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@nextui-org/react';
-import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTrips } from '@/hooks/useTrips';
+import { normalizedServices } from '../service/normalizedServices';
 
 const tabs = [
     { id: 'itinerary', label: 'Itinerary' },
     { id: 'services', label: 'Services Group' },
 ]
 
-export default function BookingDetail({ code }) {
+export default function BookingDetail({ code = '54510058-bcc4-491a-9f63-99a06588e25d' }) {
     const [activeTab, setActiveTab] = useState('itinerary');
     const router = useRouter();
     const handleTabChange = (tabId) => {
         setActiveTab(tabId);
     };
 
-    // Mock booking data - sử dụng code được truyền vào
-    const bookingInfo = {
-        code: code || '0305-ASCORE-STS',
-        sale: 'Nguyễn Văn A',
-        groupSize: '70 pax (3 nhóm)',
-        arrival: '01/07/2025',
-        departReturn: '06/07/2025',
-        report: 'ASCORE STS Hanoi - Halong'
-    };
+    const { getTrip, currentTrip, loading } = useTrips();
+    useEffect(() => {
+        getTrip(code);
+    }, [code]);
+
 
     const infoFields = [
-        {
-            label: 'Code',
-            value: bookingInfo.code,
-        },
-        {
-            label: 'Sale',
-            value: bookingInfo.sale,
-        },
-        {
-            label: 'Group Size',
-            value: bookingInfo.groupSize,
-        },
-        {
-            label: 'Arrival',
-            value: bookingInfo.arrival,
-        },
-        {
-            label: 'Depart / Return',
-            value: bookingInfo.departReturn,
-        },
-        {
-            label: 'Report',
-            value: bookingInfo.report,
-        }
+        { label: 'Code', value: currentTrip?.code },
+        { label: 'Sale', value: currentTrip?.sale },
+        { label: 'Group Size', value: currentTrip?.groupSize },
+        { label: 'Arrival', value: currentTrip?.arrival },
+        { label: 'Depart / Return', value: currentTrip?.departReturn },
+        { label: 'Report', value: currentTrip?.report },
     ];
 
     return (
@@ -113,7 +91,7 @@ export default function BookingDetail({ code }) {
 
             {activeTab === 'itinerary' && (
                 <div className="mt-4">
-                    <ItineraryTable data={mockDataItineraryTable} />
+                    <ItineraryTable data={normalizedServices(currentTrip?.tripDays)} />
                 </div>
             )}
 
