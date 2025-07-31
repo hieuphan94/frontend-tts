@@ -7,8 +7,15 @@ export const tripsApi = {
     return response.data;
   },
 
+  // Get all trips for test
   getAllTripsTest: async (params) => {
-    const response = await axios.get('/api/trips/test/all', { params });;
+    const response = await axios.get('/api/trips/test/all', { params });
+    return response.data;
+  },
+
+  // Get all trips for test
+  getTripByIdTest: async (id) => {
+    const response = await axios.get(`/api/trips/test/${id}`);
     return response.data;
   },
 

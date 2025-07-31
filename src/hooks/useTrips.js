@@ -106,7 +106,8 @@ export const useTrips = () => {
     async (id) => {
       dispatch(getTripStart());
       try {
-        const response = await tripsApi.getTripById(id);
+        // const response = await tripsApi.getTripById(id);
+        const response = await tripsApi.getTripByIdTest(id);
         dispatch(getTripSuccess(response.data));
         return response.data;
       } catch (error) {
