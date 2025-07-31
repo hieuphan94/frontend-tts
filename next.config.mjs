@@ -4,7 +4,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_REDUX_PERSIST_SSR_DISABLE: 'true',
   },
-  // Cấu hình cho @react-pdf/renderer
   transpilePackages: ['@react-pdf/renderer'],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
@@ -12,9 +11,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    remotePatterns: [
-
-    ],
+    remotePatterns: [],
     formats: ['image/webp'],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
@@ -22,9 +19,18 @@ const nextConfig = {
     unoptimized: false,
     loader: 'default',
   },
-  // Cho phép đọc file từ public folder
   publicRuntimeConfig: {
     staticFolder: '/public',
+  },
+
+  // 👇 Thêm đoạn này để proxy request từ local sang backend
+  async rewrites() {
+    return [
+      {
+        source: '/api/trips/:path*',
+        destination: 'https://backend.ima-workspace.hieuspace.com/api/trips/:path*',
+      },
+    ];
   },
 };
 
