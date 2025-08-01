@@ -5,9 +5,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-  Button,
 } from '@nextui-org/react';
-import PropTypes from 'prop-types';
 import { memo, useState } from 'react';
 import { paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
 import { colorStatusBooking } from '../utils/colorStatusBooking';
@@ -118,7 +116,7 @@ export const ServicesTable = memo(({ data }) => {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 flex items-center justify-center text-gray-600">
+                      <div className="w-4 h-4 flex items-center justify-center text-gray-600 ">
                         <ChevronDownIcon className={`w-3 h-3 text-primary`} />
                       </div>
                       <span>{group.service}</span>

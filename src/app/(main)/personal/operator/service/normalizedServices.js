@@ -9,7 +9,7 @@ export const normalizedServices = (tripDays) => {
         food: { title: 'Food ' },
         visit: { title: 'Visits' },
         accommodation: { title: 'Accommodation' },
-        guide: { title: 'Guide Service' },
+        guide: { title: 'Guide' },
         transport: { title: 'Transportation' },
         other: { title: 'Other' }
     };
@@ -157,15 +157,15 @@ export const normalizedServices = (tripDays) => {
 
     const groupedServices = [];
 
-    // Create group entries for each category
-    Object.entries(categoryGroups).forEach(([category, services]) => {
-        const categoryInfo = serviceCategories[category] || serviceCategories.other;
+    // Create group entries for each category (show all categories even if empty)
+    Object.entries(serviceCategories).forEach(([category, categoryInfo]) => {
+        const services = categoryGroups[category] || [];
         const groupTotalSale = services.reduce((sum, service) => sum + service.cost, 0);
 
         groupedServices.push({
             id: category,
             service: categoryInfo.title,
-            services: services,
+            services: services, // This will be empty array if no paid services
             totalSale: formatVND(groupTotalSale),
             category: category,
         });

@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { ItineraryTable } from '../components/ItineraryTable';
 import { ServicesTable } from '../components/ServicesTable';
-import { mockDataItineraryTable } from '../data/mockDataBookingDetail';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTrips } from '@/hooks/useTrips';
@@ -112,7 +111,9 @@ export default function BookingDetail({ code = '54510058-bcc4-491a-9f63-99a06588
 
             {activeTab === 'services' && (
                 <div className="mt-4">
-                    <ServicesTable data={normalizedServices(currentTrip.tripDays)} />
+                    {isDataReady && (
+                        <ServicesTable data={normalizedServices(currentTrip.tripDays)} />
+                    )}
                 </div>
             )}
         </div>
