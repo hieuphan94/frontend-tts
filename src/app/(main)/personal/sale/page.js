@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableCell, TableRow, Button, Pagination } from '@nextui-org/react';
 import { useTrips } from '@/hooks/useTrips';
-import CreateBookOpModal from './components/createBookOpModal';
+import CreateBookOpModal from './components/CreateBookOpModal';
 import ColumnVisibilityModal from './components/ColumnVisibilityModal';
 import { FilterIcon } from 'lucide-react';
 import { colorStatusRequest } from './utils/colorStatusRequest';

@@ -129,7 +129,7 @@ export const ItineraryTable = memo(({ data }) => {
                     {tripDays.map((group) => (
                         <>
                             {/* Group Header Row */}
-                            <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-200">
+                            <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-300">
                                 <TableCell
                                     colSpan={7}
                                     className="text-xs font-bold text-gray-800 py-2 cursor-pointer hover:bg-gray-100 transition-colors"
@@ -138,7 +138,7 @@ export const ItineraryTable = memo(({ data }) => {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 flex items-center justify-center text-gray-600">
-                                                <ChevronDownIcon className={`w-3 h-3 transition-transform ${collapsedGroups.has(group.id) ? '' : 'rotate-360'}`} />
+                                                <ChevronDownIcon className={`w-3 h-3 text-primary`} />
                                             </div>
                                             <span>Day {group.order}: {group.titleOfDay}</span>
                                             <span className="text-xs text-gray-800 font-medium">
@@ -161,7 +161,7 @@ export const ItineraryTable = memo(({ data }) => {
 
                             {/* Service Rows */}
                             {!collapsedGroups.has(group.id) && group.services.map((service) => (
-                                <TableRow key={service.id} className="text-xs text-gray-800 border-b border-gray-300">
+                                <TableRow key={service.id} className="text-xs text-gray-800 border-b border-gray-200">
                                     <TableCell className="text-xs w-[400px] max-w-[400px]">
                                         <div className="w-full">
                                             <div className="flex items-center gap-2">

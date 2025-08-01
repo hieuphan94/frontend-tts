@@ -9,12 +9,12 @@ import {
 } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { memo, useState } from 'react';
-import { mockGroupedData, paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
+import { paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
 import { colorStatusBooking } from '../utils/colorStatusBooking';
 import { ChevronDownIcon, Replace } from 'lucide-react';
 
 const columns = [
-  { key: 'day', label: 'Day ' },
+  { key: 'service', label: 'Service ' },
   { key: 'quantity', label: 'SL' },
   { key: 'unitPrice', label: 'Unit Price' },
   { key: 'total', label: 'Total' },
@@ -24,7 +24,7 @@ const columns = [
   { key: 'notes', label: 'Notes' },
 ];
 
-export const ServicesTable = memo(({ data = mockGroupedData }) => {
+export const ServicesTable = memo(({ data }) => {
   const [servicesData, setServicesData] = useState(data);
   const [collapsedGroups, setCollapsedGroups] = useState(new Set());
 
@@ -110,7 +110,7 @@ export const ServicesTable = memo(({ data = mockGroupedData }) => {
           {servicesData.map((group) => (
             <>
               {/* Group Header Row */}
-              <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-200">
+              <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-300">
                 <TableCell
                   colSpan={8}
                   className="text-xs font-bold text-gray-800 py-2 cursor-pointer hover:bg-gray-100 transition-colors"
@@ -119,9 +119,9 @@ export const ServicesTable = memo(({ data = mockGroupedData }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 flex items-center justify-center text-gray-600">
-                        <ChevronDownIcon className={`w-3 h-3 transition-transform ${collapsedGroups.has(group.id) ? '' : 'rotate-360'}`} />
+                        <ChevronDownIcon className={`w-3 h-3 text-primary`} />
                       </div>
-                      <span>{group.day}</span>
+                      <span>{group.service}</span>
                       <span className="text-xs text-gray-800 font-medium">
                         ({group.services.length} services)
                       </span>
@@ -133,7 +133,7 @@ export const ServicesTable = memo(({ data = mockGroupedData }) => {
                       </div>
                       <div className="flex items-center gap-1">
                         <span className="text-green-600">Giá bán:</span>
-                        <span className="font-bold">{group.totalCost || '0'}</span>
+                        <span className="font-bold"></span>
                       </div>
                     </div>
                   </div>
@@ -142,8 +142,8 @@ export const ServicesTable = memo(({ data = mockGroupedData }) => {
 
               {/* Service Rows */}
               {!collapsedGroups.has(group.id) && group.services.map((service) => (
-                <TableRow key={service.id} className="text-xs text-gray-800 border-b border-gray-100">
-                  <TableCell className="text-xs w-[400px] max-w-[400px]">
+                <TableRow key={service.id} className="text-xs text-gray-800 border-b border-gray-200">
+                  <TableCell className="text-xs w-[200px] max-w-[200px]">
                     <div className="w-full">
                       <div className="flex items-center gap-2">
                         <button
@@ -220,14 +220,13 @@ export const ServicesTable = memo(({ data = mockGroupedData }) => {
                       ))}
                     </select>
                   </TableCell>
-                  <TableCell className="text-xs">
+                  <TableCell className="text-xs w-[400px] max-w-[400px]">
                     <textarea
                       value={service.notes}
                       onChange={(e) => {
                         // Handle notes change
                       }}
-                      className="w-full text-xs p-1 border rounded resize-none"
-                      rows={1}
+                      className="w-full h-20 text-xs p-2 border rounded resize-none overflow-y-auto"
                     />
                   </TableCell>
                 </TableRow>
