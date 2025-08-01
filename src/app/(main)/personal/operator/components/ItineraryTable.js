@@ -14,6 +14,7 @@ import { paymentOptions, statusOptions } from '../data/mockDataBookingDetail';
 import { colorStatusBooking } from '../utils/colorStatusBooking';
 import { ChevronDownIcon, Replace } from 'lucide-react';
 
+
 const columnsItineraryTable = [
     { key: 'day', label: 'Day' },
     { key: 'quantity', label: 'Qty (SL)' },
@@ -25,8 +26,17 @@ const columnsItineraryTable = [
 ];
 
 export const ItineraryTable = memo(({ data }) => {
-    const [tableData, setTableData] = useState(data);
+    const [tripDays, setTripDays] = useState(data);
     const [collapsedGroups, setCollapsedGroups] = useState(new Set());
+
+    // Cập nhật tableData khi data prop thay đổi
+    useEffect(() => {
+        if (data && Array.isArray(data)) {
+            setTripDays(data);
+        } else {
+            setTripDays([]);
+        }
+    }, [data]);
 
     const toggleGroup = (groupId) => {
         setCollapsedGroups(prev => {
@@ -42,7 +52,7 @@ export const ItineraryTable = memo(({ data }) => {
 
     // Xử lý thay đổi loại payment
     const handlePaymentChange = (groupId, serviceId, value) => {
-        setTableData(prevData => prevData.map(group => {
+        setTripDays(prevData => prevData.map(group => {
             if (group.id === groupId) {
                 return {
                     ...group,
@@ -64,7 +74,7 @@ export const ItineraryTable = memo(({ data }) => {
 
     // Xử lý thay đổi status
     const handleStatusChange = (groupId, serviceId, value) => {
-        setTableData(prevData => prevData.map(group => {
+        setTripDays(prevData => prevData.map(group => {
             if (group.id === groupId) {
                 return {
                     ...group,
@@ -81,7 +91,7 @@ export const ItineraryTable = memo(({ data }) => {
     };
 
     const handleCostChange = (groupId, serviceId, value) => {
-        setTableData(prevData => prevData.map(group => {
+        setTripDays(prevData => prevData.map(group => {
             if (group.id === groupId) {
                 return {
                     ...group,
@@ -115,8 +125,8 @@ export const ItineraryTable = memo(({ data }) => {
                         </TableColumn>
                     ))}
                 </TableHeader>
-                <TableBody emptyContent={tableData.length === 0 ? 'Không có dữ liệu' : undefined}>
-                    {tableData.map((group) => (
+                <TableBody>
+                    {tripDays.map((group) => (
                         <>
                             {/* Group Header Row */}
                             <TableRow key={`group-${group.id}`} className="text-xs bg-gray-50 border-b border-gray-200">
@@ -130,19 +140,19 @@ export const ItineraryTable = memo(({ data }) => {
                                             <div className="w-4 h-4 flex items-center justify-center text-gray-600">
                                                 <ChevronDownIcon className={`w-3 h-3 transition-transform ${collapsedGroups.has(group.id) ? '' : 'rotate-360'}`} />
                                             </div>
-                                            <span>{group.order} - {group.titleOfDay}</span>
-                                            {/* <span className="text-xs text-gray-800 font-medium">
-                                                ({group.length} services)
-                                            </span> */}
+                                            <span>Day {group.order}: {group.titleOfDay}</span>
+                                            <span className="text-xs text-gray-800 font-medium">
+                                                ({group.services.length} services)
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-4 text-xs">
                                             <div className="flex items-center gap-1">
                                                 <span className="text-blue-600">Giá hệ thống:</span>
-                                                <span className="font-bold">{group?.priceTotal}</span>
+                                                <span className="font-medium">{group?.priceTotal}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <span className="text-green-600">Giá bán:</span>
-                                                <span className="font-bold">{group.priceTotal}</span>
+                                                <span className="font-medium"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -185,9 +195,7 @@ export const ItineraryTable = memo(({ data }) => {
                                     <TableCell className="text-xs">
                                         <input
                                             type="number"
-                                            value={service.cost}
                                             className="w-20 text-xs p-1 border rounded"
-                                            onChange={e => handleCostChange(group.id, service.id, e.target.value)}
                                         />
                                     </TableCell>
                                     <TableCell className="text-xs">
@@ -217,7 +225,7 @@ export const ItineraryTable = memo(({ data }) => {
                                     </TableCell>
                                     <TableCell className="text-xs">
                                         <select
-                                            className={`border rounded px-2 py-1 text-xs font-medium ${colorStatusBooking(service.status)}`}
+                                            className={`border rounded px-2 py-1 text-xs font-medium ${colorStatusBooking(service.status) || ''}`}
                                             value={service.status}
                                             onChange={e => handleStatusChange(group.id, service.id, e.target.value)}
                                         >

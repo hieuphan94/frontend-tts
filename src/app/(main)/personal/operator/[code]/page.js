@@ -6,8 +6,9 @@ import { mockDataItineraryTable } from '../data/mockDataBookingDetail';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useTrips } from '@/hooks/useTrips';
+import { Spinner } from '@nextui-org/react';
+import { normalizedItinerary } from '../service/normalizedItinerary';
 import { normalizedServices } from '../service/normalizedServices';
-
 const tabs = [
     { id: 'itinerary', label: 'Itinerary' },
     { id: 'services', label: 'Services Group' },
@@ -20,19 +21,30 @@ export default function BookingDetail({ code = '54510058-bcc4-491a-9f63-99a06588
         setActiveTab(tabId);
     };
 
-    const { getTrip, currentTrip, loading } = useTrips();
+    const { getTrip, currentTrip, loading, error } = useTrips();
     useEffect(() => {
         getTrip(code);
     }, [code]);
 
+    // Kiểm tra xem dữ liệu đã sẵn sàng chưa
+    const isDataReady = !loading && currentTrip && currentTrip.tripDays;
 
+
+    // Hiển thị loading toàn màn hình
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <Spinner />
+            </div>
+        );
+    }
     const infoFields = [
-        { label: 'Code', value: currentTrip?.code },
-        { label: 'Sale', value: currentTrip?.sale },
-        { label: 'Group Size', value: currentTrip?.groupSize },
-        { label: 'Arrival', value: currentTrip?.arrival },
-        { label: 'Depart / Return', value: currentTrip?.departReturn },
-        { label: 'Report', value: currentTrip?.report },
+        { label: 'Code', value: currentTrip?.code || 'N/A' },
+        { label: 'Sale', value: currentTrip?.sale || 'N/A' },
+        { label: 'Group Size', value: currentTrip?.groupSize || 'N/A' },
+        { label: 'Arrival', value: currentTrip?.arrival || 'N/A' },
+        { label: 'Depart / Return', value: currentTrip?.departReturn || 'N/A' },
+        { label: 'Report', value: currentTrip?.report || 'N/A' },
     ];
 
     return (
@@ -51,6 +63,7 @@ export default function BookingDetail({ code = '54510058-bcc4-491a-9f63-99a06588
                     <span>Booking Detail</span>
                 </div>
             </div>
+
             {/* Booking Info */}
             <div className="mb-6">
                 <div className="bg-white rounded-lg border border-gray-200 p-4">
@@ -91,13 +104,15 @@ export default function BookingDetail({ code = '54510058-bcc4-491a-9f63-99a06588
 
             {activeTab === 'itinerary' && (
                 <div className="mt-4">
-                    <ItineraryTable data={normalizedServices(currentTrip?.tripDays)} />
+                    {isDataReady && (
+                        <ItineraryTable data={normalizedItinerary(currentTrip.tripDays)} />
+                    )}
                 </div>
             )}
 
             {activeTab === 'services' && (
                 <div className="mt-4">
-                    <ServicesTable />
+                    <ServicesTable data={normalizedServices(currentTrip.tripDays)} />
                 </div>
             )}
         </div>
